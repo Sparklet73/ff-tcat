@@ -218,6 +218,20 @@ function create_admin() {
     ) ENGINE = MyISAM DEFAULT CHARSET = utf8";
     $create = $dbh->prepare($sql);
     $create->execute();
+
+    $sql = "CREATE TABLE IF NOT EXISTS tcat_search_timetable (
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `querybin_id` INT NOT NULL,
+    `createtime` DATETIME NULL,
+    `savedtime` DATETIME NULL,
+    PRIMARY KEY (`id`),
+    KEY `querybin_id` (`querybin_id`),
+    KEY `createtime` (`createtime`),
+    KEY `savedtime` (`savedtime`)
+    ) ENGINE = MyISAM DEFAULT CHARSET = utf8";
+    $create = $dbh->prepare($sql);
+    $create->execute();
+
     $dbh = false;
 }
 
@@ -444,9 +458,9 @@ function queryManagerBinExists($binname) {
     $rec->bindParam(":binname", $binname, PDO::PARAM_STR);
     if ($rec->execute() && $rec->rowCount() > 0) { // check whether the table has already been imported
         $res = $rec->fetch();
-        print "The query bin '$binname' already exists. Are you sure you want to add tweets to '$binname'? (yes/no)" . PHP_EOL;
-        if (trim(fgets(fopen("php://stdin", "r"))) != 'yes')
-            die('Abort' . PHP_EOL);
+        //print "The query bin '$binname' already exists. Are you sure you want to add tweets to '$binname'? (yes/no)" . PHP_EOL;
+        //if (trim(fgets(fopen("php://stdin", "r"))) != 'yes')
+        //    die('Abort' . PHP_EOL);
         return $res['id'];
     }
     return false;
@@ -552,6 +566,20 @@ function queryManagerInsertUsers($querybin_id, $users, $starttime = "0000-00-00 
             die("could not insert into tcat_query_bins_users $sql\n");
     }
     $dbh = false;
+}
+
+function searchTimeTable($binname, $createtime = "0000-00-00 00:00:00", $savedtime = "0000-00-00 00:00:00", $active = 0){
+    $dbh = pdo_connect();
+    //create search time table for keeping create time and saved time
+    $sql = "INSERT INTO tcat_search_timetable (querybin_id, createtime, savedtime) VALUES (:querybin_id, :createtime, :savedtime)";
+    $rec = $dbh->prepare($sql);
+    $rec->bindParam(":querybin_id", $querybin_id, PDO::PARAM_INT);
+    $rec->bindParam(":createtime", $createtime, PDO::PARAM_STR);
+    $rec->bindParam(":savedtime", $savedtime, PDO::PARAM_STR);
+    if (!$rec->execute() || !$rec->rowCount())
+        die("could not insert period for $binname with id $querybin_id\n");
+    $dbh = false;
+    return $querybin_id;
 }
 
 /*
