@@ -67,10 +67,10 @@ $lastRateLimitHit = getLastRateLimitHit();
     echo '<table id="thetable">';
     echo '<thead>';
     echo '<tr>';
-    echo '<th>querybin</th>';
-    echo '<th>description</th>';
-    echo '<th class="keywords">queries</th>';
-    echo '<th>no. tweets</th>';
+    echo '<th>Querybin</th>';
+    echo '<th>Description</th>';
+    echo '<th class="keywords">Queries</th>';
+    echo '<th>No. tweets</th>';
     echo '<th>Periods in which the query bin was active</th>';
     echo '</tr>';
     echo '</thead>';
@@ -80,14 +80,11 @@ $lastRateLimitHit = getLastRateLimitHit();
         $phrasePeriodsList = array();
         $activePhraseList = array();
 
-        if ($bin->type == 'search')
-        {
-            foreach ($bin->phrases as $phrase)
-            {
+        if ($bin->type == 'search') {
+            foreach ($bin->phrases as $phrase) {
                 $phrasePeriodList[$phrase->id] = array_unique($phrase->periods);
                 $phraseList[$phrase->id] = $phrase->phrase;
-                if ($phrase->active)
-                {
+                if ($phrase->active) {
                     $activePhraselist[$phrase->id] = $phrase->phrase;
                 }
             }

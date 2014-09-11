@@ -222,12 +222,16 @@ function create_admin() {
     $sql = "CREATE TABLE IF NOT EXISTS tcat_search_timetable (
     `id` INT NOT NULL AUTO_INCREMENT,
     `querybin_id` INT NOT NULL,
+    `description` VARCHAR(255),
     `createtime` DATETIME NULL,
+    `updatetime` DATETIME NULL,
     `savedtime` DATETIME NULL,
     PRIMARY KEY (`id`),
     KEY `querybin_id` (`querybin_id`),
+    KEY `description` (`description`),
     KEY `createtime` (`createtime`),
-    KEY `savedtime` (`savedtime`)
+    KEY `updatetime`(`updatetime`),
+    KEY `savedtime` (`savedtime`),
     ) ENGINE = MyISAM DEFAULT CHARSET = utf8";
     $create = $dbh->prepare($sql);
     $create->execute();
@@ -478,6 +482,10 @@ function queryManagerCreateBinFromExistingTables($binname, $querybin_id, $type, 
     $starttime = $res['min'];
     $endtime = $res['max'];
 
+    //save the existing time of bin
+    $createtime = "0000-00-00 00:00:00";
+    $updatetime = "0000-00-00 00:00:00";
+
     // create bin in query manager
     if ($querybin_id === false)
         $querybin_id = queryManagerCreateBin($binname, $type, $starttime, $endtime, 0);
@@ -490,10 +498,17 @@ function queryManagerCreateBinFromExistingTables($binname, $querybin_id, $type, 
         }
     }
 
-    if ($type == 'track' || $type == 'search' || $type == "import ytk" || $type == "import track") // insert phrases
+    if ($type == 'track' || $type == "import ytk" || $type == "import track") {// insert phrases
         queryManagerInsertPhrases($querybin_id, $queries, $starttime, $endtime);
-    elseif ($type == 'follow' || $type == 'timeline' || $type == 'import timeline') {// insert users
+    } elseif ($type == 'follow' || $type == 'timeline' || $type == 'import timeline') {// insert users
         queryManagerInsertUsers($querybin_id, $queries, $starttime, $endtime);
+    } elseif ($type == 'search') {
+        $rec = $dbh->prepare("SELECT binname FROM tcat_query_bins WHERE querybin = :binname"); //設計search的功能呈現
+        $rec->bindParam(":binname", $querybin_id, PDO::PARAM_INT);
+        if ($rec->execute() && $rec->rowCount() = 0) {
+            queryManagerInsertPhrases($querybin_id, $queries, $starttime, $endtime);
+        }
+        searchTimeTable($querybin_id, $createtime, $updatetime);
     }
 }
 
@@ -568,18 +583,17 @@ function queryManagerInsertUsers($querybin_id, $users, $starttime = "0000-00-00 
     $dbh = false;
 }
 
-function searchTimeTable($binname, $createtime = "0000-00-00 00:00:00", $savedtime = "0000-00-00 00:00:00", $active = 0){
+function searchTimeTable($querybin_id, $createtime = "0000-00-00 00:00:00", $updatetime = "0000-00-00 00:00:00"){
     $dbh = pdo_connect();
     //create search time table for keeping create time and saved time
-    $sql = "INSERT INTO tcat_search_timetable (querybin_id, createtime, savedtime) VALUES (:querybin_id, :createtime, :savedtime)";
+    $sql = "INSERT INTO tcat_search_timetable (querybin_id, createtime, updatetime) VALUES (:querybin_id, :createtime, :updatetime)";
     $rec = $dbh->prepare($sql);
     $rec->bindParam(":querybin_id", $querybin_id, PDO::PARAM_INT);
     $rec->bindParam(":createtime", $createtime, PDO::PARAM_STR);
-    $rec->bindParam(":savedtime", $savedtime, PDO::PARAM_STR);
+    $rec->bindParam(":updatetime", $updatetime, PDO::PARAM_STR);
     if (!$rec->execute() || !$rec->rowCount())
-        die("could not insert period for $binname with id $querybin_id\n");
+        die("could not insert into tcat_search_timetable $sql\n");
     $dbh = false;
-    return $querybin_id;
 }
 
 /*
