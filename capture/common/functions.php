@@ -220,8 +220,8 @@ function create_admin() {
     $create->execute();
 
     /**
-     * ＠author: Ching-Ya Lin
-     * ＠date: 2014/9/10
+     * @author: Ching-Ya Lin
+     * @date: 2014/9/10
      * @todo: 儲存search功能的關鍵字存活時間表。
      */
     $sql = "CREATE TABLE IF NOT EXISTS tcat_search_timetable (

@@ -1,7 +1,8 @@
 <?php
 /**
- * ＠author: Ching-Ya Lin
- * ＠date: 2014/8/22
+ * @author: Ching-Ya Lin
+ * @since: 2014/8/22
+ *
  */
 include_once("../../config.php");
 
@@ -18,9 +19,6 @@ create_error_logs();
 $captureroles = unserialize(CAPTUREROLES);
 
 $querybins = getBins();
-$activePhrases = getNrOfActivePhrases();
-$activeUsers = getNrOfActiveUsers();
-$lastRateLimitHit = getLastRateLimitHit();
 ?>
 
 <html>
@@ -55,39 +53,47 @@ $lastRateLimitHit = getLastRateLimitHit();
                     </div>
                 </div>
                 <div class="form-group">
+                    <label for="inputPhrase" class="col-sm-2 control-label">Description</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="inputDescription" placeholder="Description">
+                        <br>
+                    </div>
+                </div>
+                <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
                         <button type="submit" class="btn btn-default">Create query bin</button>
                     </div>
                 </div>
             </form>
     <br>
-    <?php
-    echo "<h2>Query manager</h2>";
-    echo '<table id="thetable">';
-    echo '<thead>';
-    echo '<tr>';
-    echo '<th>Querybin</th>';
-    echo '<th>Description</th>';
-    echo '<th class="keywords">Queries</th>';
-    echo '<th>No. tweets</th>';
-    echo '<th>Periods in which the query bin was active</th>';
-    echo '</tr>';
-    echo '</thead>';
-    echo '<tbody>';
+
+    <h2>Query manager</h2>
+    <table id="thetable">
+    <thead>
+    <tr>
+    <th>Querybin</th>
+    <th>Description</th>
+    <th class="keywords">Queries</th>
+    <th>No. tweets</th>
+    <th>Periods in which the query bin was active</th>
+    </tr>
+    </thead>
+    <tbody>
+<?php
     foreach ($querybins as $bin) {
         $phraseList = array();
         $phrasePeriodsList = array();
         $activePhraseList = array();
 
-        if ($bin->type == 'search') {
-            foreach ($bin->phrases as $phrase) {
-                $phrasePeriodList[$phrase->id] = array_unique($phrase->periods);
-                $phraseList[$phrase->id] = $phrase->phrase;
-                if ($phrase->active) {
-                    $activePhraselist[$phrase->id] = $phrase->phrase;
-                }
-            }
-        }
+//        if ($bin->type == 'search') {
+//            foreach ($bin->phrases as $phrase) {
+//                $phrasePeriodList[$phrase->id] = array_unique($phrase->periods);
+//                $phraseList[$phrase->id] = $phrase->phrase;
+//                if ($phrase->active) {
+//                    $activePhraselist[$phrase->id] = $phrase->phrase;
+//                }
+//            }
+//        }
         $bin->periods = array_unique($bin->periods);
         sort($bin->periods);
         asort($phraseList);
