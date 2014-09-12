@@ -219,6 +219,11 @@ function create_admin() {
     $create = $dbh->prepare($sql);
     $create->execute();
 
+    /**
+     * ＠author: Ching-Ya Lin
+     * ＠date: 2014/9/10
+     * @todo: 儲存search功能的關鍵字存活時間表。
+     */
     $sql = "CREATE TABLE IF NOT EXISTS tcat_search_timetable (
     `id` INT NOT NULL AUTO_INCREMENT,
     `querybin_id` INT NOT NULL,
@@ -503,9 +508,9 @@ function queryManagerCreateBinFromExistingTables($binname, $querybin_id, $type, 
     } elseif ($type == 'follow' || $type == 'timeline' || $type == 'import timeline') {// insert users
         queryManagerInsertUsers($querybin_id, $queries, $starttime, $endtime);
     } elseif ($type == 'search') {
-        $rec = $dbh->prepare("SELECT binname FROM tcat_query_bins WHERE querybin = :binname"); //設計search的功能呈現
-        $rec->bindParam(":binname", $querybin_id, PDO::PARAM_INT);
-        if ($rec->execute() && $rec->rowCount() = 0) {
+        $rec = $dbh->prepare("SELECT binname FROM tcat_query_bins WHERE querybin = :binname"); //設計search的功能
+        $rec->bindParam(":binname", $binname, PDO::PARAM_STR);
+        if ($rec->execute() && $rec->rowCount() == 0) { //一個bin內的關鍵字只會存一份
             queryManagerInsertPhrases($querybin_id, $queries, $starttime, $endtime);
         }
         searchTimeTable($querybin_id, $createtime, $updatetime);
@@ -582,7 +587,10 @@ function queryManagerInsertUsers($querybin_id, $users, $starttime = "0000-00-00 
     }
     $dbh = false;
 }
-
+/**
+ * ＠author: Ching-Ya Lin
+ * ＠date: 2014/9/10
+ */
 function searchTimeTable($querybin_id, $createtime = "0000-00-00 00:00:00", $updatetime = "0000-00-00 00:00:00"){
     $dbh = pdo_connect();
     //create search time table for keeping create time and saved time

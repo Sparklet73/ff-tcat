@@ -1,8 +1,7 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: Ching-Ya Lin
- * Date: 2014/8/22
+ * ＠author: Ching-Ya Lin
+ * ＠date: 2014/8/22
  */
 include_once("../../config.php");
 
