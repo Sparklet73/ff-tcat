@@ -224,19 +224,16 @@ function create_admin() {
      * @date: 2014/9/10
      * @todo: 儲存search功能的關鍵字存活時間表。
      */
-    $sql = "CREATE TABLE IF NOT EXISTS tcat_search_timetable (
-    `id` INT NOT NULL AUTO_INCREMENT,
-    `querybin_id` INT NOT NULL,
+    $sql = "CREATE TABLE IF NOT EXISTS `tcat_search_timetable` (
+    `id` INT(11) unsigned NOT NULL AUTO_INCREMENT,
+    `querybin_id` INT(11) unsigned NOT NULL,
     `description` VARCHAR(255),
     `createtime` DATETIME NULL,
     `updatetime` DATETIME NULL,
     `savedtime` DATETIME NULL,
     PRIMARY KEY (`id`),
     KEY `querybin_id` (`querybin_id`),
-    KEY `description` (`description`),
-    KEY `createtime` (`createtime`),
-    KEY `updatetime`(`updatetime`),
-    KEY `savedtime` (`savedtime`),
+    KEY `updatetime`(`updatetime`)
     ) ENGINE = MyISAM DEFAULT CHARSET = utf8";
     $create = $dbh->prepare($sql);
     $create->execute();

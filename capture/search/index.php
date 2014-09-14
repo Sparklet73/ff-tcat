@@ -124,10 +124,10 @@ $querybins = getBins();
             if(!validateBin(_bin))
                 return false;
 
-            var _phrases = $("#newbin_phrases").val();
-            var _check = window.confirm("You are about to create a new query bin. Are you sure?");
+//            var _phrases = $("#newbin_phrases").val();
+            var _check = window.confirm("You are about to create a new search query bin. Are you sure?");
             if(_check == true) {
-                var _params = {action:"newbin",type:_type,newbin_phrases:_phrases,newbin_name:_bin,active:$("#make_active").val()};
+                var _params = {action:"newbin",type:"search",newbin_name:_bin,active:$("#make_active").val()};
 
                 $.ajax({
                     dataType: "json",

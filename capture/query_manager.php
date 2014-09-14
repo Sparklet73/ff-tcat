@@ -129,6 +129,9 @@ function create_new_bin($params) {
             $insert_connect = $dbh->prepare($sql);
             $insert_connect->execute();
         }
+    } elseif($type == "search") {
+        // Search code Here
+        // INSERT INTO tcat_search_timetable
     }
 
     if (web_reload_config_role($type)) {
