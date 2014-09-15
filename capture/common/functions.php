@@ -227,7 +227,8 @@ function create_admin() {
     $sql = "CREATE TABLE IF NOT EXISTS `tcat_search_timetable` (
     `id` INT(11) unsigned NOT NULL AUTO_INCREMENT,
     `querybin_id` INT(11) unsigned NOT NULL,
-    `description` VARCHAR(255),
+    `description` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci,
+    `origin_phrase` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci,
     `createtime` DATETIME NULL,
     `updatetime` DATETIME NULL,
     `savedtime` DATETIME NULL,
