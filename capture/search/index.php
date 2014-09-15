@@ -48,7 +48,7 @@ $querybins = getBins();
                     <label for="inputPhrase" class="col-sm-2 control-label">Phrase to search</label>
                     <div class="col-sm-10">
                         <input type="text" class="form-control" id="inputPhrase" placeholder="Phrases">
-                        <li>以OR區別關鍵字，例如:台灣 OR 中華民國 OR Taiwan OR Republic of China</li>
+                        <li>以OR區別關鍵字，例如:台灣 OR 中華民國 OR Taiwan OR "Republic of China"</li>
                         <br>
                     </div>
                 </div>
@@ -85,15 +85,15 @@ $querybins = getBins();
         $phrasePeriodsList = array();
         $activePhraseList = array();
 
-//        if ($bin->type == 'search') {
-//            foreach ($bin->phrases as $phrase) {
-//                $phrasePeriodList[$phrase->id] = array_unique($phrase->periods);
-//                $phraseList[$phrase->id] = $phrase->phrase;
-//                if ($phrase->active) {
-//                    $activePhraselist[$phrase->id] = $phrase->phrase;
-//                }
-//            }
-//        }
+        if ($bin->type == 'search') {
+            foreach ($bin->phrases as $phrase) {
+                $phrasePeriodList[$phrase->id] = array_unique($phrase->periods);
+                $phraseList[$phrase->id] = $phrase->phrase;
+                if ($phrase->active) {
+                    $activePhraselist[$phrase->id] = $phrase->phrase;
+                }
+            }
+        }
         $bin->periods = array_unique($bin->periods);
         sort($bin->periods);
         asort($phraseList);
@@ -121,14 +121,14 @@ $querybins = getBins();
 
         function sendNewForm() {
             var _bin = $("#newbin_name").val();
-            var _descript = $("#inputDescription").val();
+            var _description = $("#inputDescription").val();
             if(!validateBin(_bin))
                 return false;
 
-//            var _phrases = $("#newbin_phrases").val();
+            var _phrases = $("#newbin_phrases").val();
             var _check = window.confirm("You are about to create a new search query bin. Are you sure?");
             if(_check == true) {
-                var _params = {action:"newbin",type:"search",newbin_name:_bin,descript:_descript,active:$("#make_active").val()};
+                var _params = {action:"newbin",type:"search",newbin_phrases:_phrases,newbin_name:_bin,description:_description,active:$("#make_active").val()};
 
                 $.ajax({
                     dataType: "json",

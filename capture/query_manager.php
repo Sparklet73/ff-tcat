@@ -132,13 +132,38 @@ function create_new_bin($params) {
     } elseif($type == "search") {
         // Search code Here
         // INSERT INTO tcat_search_timetable
-        $descript = trim($params['descript']);
-        $sql = "INSERT INTO `tcat_search_timetable`(`querybin_id`, `description`, `createtime`, `updatetime`, `savedtime`) VALUES (:querybin_id, :descript :createtime, NULL, NULL)";
+        $origin_parses = $params["newbin_phrases"];
+
+        $description = trim($params['description']);
+        $sql = "INSERT INTO `tcat_search_timetable`(`querybin_id`, `description`, `origin_phrase`, `createtime`, `updatetime`, `savedtime`) VALUES (:querybin_id, :description, :origin_parses, :createtime, NULL, NULL)";
         $insert_search = $dbh->prepare($sql);
         $insert_search->bindParam(":querybin_id", $lastbinid, PDO::PARAM_INT);
-        $insert_search->bindParam(":descript", $descript, PDO::PARAM_STR);
+        $insert_search->bindParam(":description", $description, PDO::PARAM_STR);
+        $insert_search->bindParam(":origin_parses", $origin_parses, PDO::PARAM_STR);
         $insert_search->bindParam(":createtime", $now, PDO::PARAM_STR);
         $insert_search->execute();
+
+        $phrases = explode("OR", $params["newbin_phrases"]);
+        $phrases = array_trim_and_unique($phrases);
+        foreach ($phrases as $phrase) {
+            $sql = "SELECT distinct(id) FROM tcat_query_phrases WHERE phrase = :phrase";
+            $check_phrase = $dbh->prepare($sql);
+            $check_phrase->bindParam(":phrase", $phrase, PDO::PARAM_STR);
+            $check_phrase->execute();
+            if ($check_phrase->rowCount() > 0) {
+                $results = $check_phrase->fetch();
+                $inid = $results['id'];
+            } else {
+                $sql = "INSERT INTO tcat_query_phrases (phrase) VALUES (:phrase)";
+                $insert_phrase = $dbh->prepare($sql);
+                $insert_phrase->bindParam(":phrase", $phrase, PDO::PARAM_STR);
+                $insert_phrase->execute();
+                $inid = $dbh->lastInsertId();
+            }
+            $sql = "INSERT INTO tcat_query_bins_phrases (phrase_id,querybin_id,starttime,endtime) VALUES ('" . $inid . "','" . $lastbinid . "','$now','0000-00-00 00:00:00')";
+            $insert_connect = $dbh->prepare($sql);
+            $insert_connect->execute();
+        }
     }
 
     if (web_reload_config_role($type)) {
