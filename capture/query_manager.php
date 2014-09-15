@@ -132,6 +132,13 @@ function create_new_bin($params) {
     } elseif($type == "search") {
         // Search code Here
         // INSERT INTO tcat_search_timetable
+        $descript = trim($params['descript']);
+        $sql = "INSERT INTO `tcat_search_timetable`(`querybin_id`, `description`, `createtime`, `updatetime`, `savedtime`) VALUES (:querybin_id, :descript :createtime, NULL, NULL)";
+        $insert_search = $dbh->prepare($sql);
+        $insert_search->bindParam(":querybin_id", $lastbinid, PDO::PARAM_INT);
+        $insert_search->bindParam(":descript", $descript, PDO::PARAM_STR);
+        $insert_search->bindParam(":createtime", $now, PDO::PARAM_STR);
+        $insert_search->execute();
     }
 
     if (web_reload_config_role($type)) {

@@ -121,13 +121,14 @@ $querybins = getBins();
 
         function sendNewForm() {
             var _bin = $("#newbin_name").val();
+            var _descript = $("#inputDescription").val();
             if(!validateBin(_bin))
                 return false;
 
 //            var _phrases = $("#newbin_phrases").val();
             var _check = window.confirm("You are about to create a new search query bin. Are you sure?");
             if(_check == true) {
-                var _params = {action:"newbin",type:"search",newbin_name:_bin,active:$("#make_active").val()};
+                var _params = {action:"newbin",type:"search",newbin_name:_bin,descript:_descript,active:$("#make_active").val()};
 
                 $.ajax({
                     dataType: "json",
