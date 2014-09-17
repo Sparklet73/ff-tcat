@@ -506,7 +506,7 @@ function queryManagerCreateBinFromExistingTables($binname, $querybin_id, $type, 
     } elseif ($type == 'follow' || $type == 'timeline' || $type == 'import timeline') {// insert users
         queryManagerInsertUsers($querybin_id, $queries, $starttime, $endtime);
     } elseif ($type == 'search') {
-        $rec = $dbh->prepare("SELECT binname FROM tcat_query_bins WHERE querybin = :binname"); //設計search的功能
+        $rec = $dbh->prepare("SELECT querybin FROM tcat_query_bins WHERE querybin = :binname"); //設計search的功能
         $rec->bindParam(":binname", $binname, PDO::PARAM_STR);
         if ($rec->execute() && $rec->rowCount() == 0) { //一個bin內的關鍵字只會存一份
             queryManagerInsertPhrases($querybin_id, $queries, $starttime, $endtime);
