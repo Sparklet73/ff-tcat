@@ -23,25 +23,27 @@ $querybins = getBins();
 
 <html>
     <head>
-        <title>FFtcat - Archive your own tweets</title>
+        <title>FFtcat - Flood Fire Twitter Capturing and Analysis Toolset</title>
         <meta charset='<?php echo mb_internal_encoding(); ?>'>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
         <style type="text/css">
-            table {font-size:12px;}
+            table { font-size:12px; }
             .form-control{width: 400px; margin: 5px;}
             th { background-color: #ccc; padding:8px;}
             td { background-color: #eee; padding:8px;}
+            .keywords { width:600px; }
         </style>
     </head>
     <body>
-        <h1>Flood Fire - Create Query Bin</h1>
+        <h1>Flood Fire - Twitter Capturing and Analysis Toolset</h1>
             <form onsubmit="sendNewForm(); return false;">
                 <div class="form-group">
                     <label for="newbin_name" class="col-sm-2 control-label">Query Bin</label>
                     <div class="col-sm-10">
                         <input type="text" class="form-control" id="newbin_name" placeholder="Bin name">
                         <li>之後不可修改。</li>
+                        <br>
                     </div>
                 </div>
                 <div class="form-group">
@@ -62,21 +64,21 @@ $querybins = getBins();
                 <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
                         <button type="submit" class="btn btn-default">Create query bin</button>
+                        <br>
+                        <br>
                     </div>
                 </div>
             </form>
-    <br>
-
     <h2>Query manager</h2>
-    <table id="thetable">
+    <table class="table table-hover">
     <thead>
-    <tr>
-    <th>Querybin</th>
-    <th>Description</th>
-    <th class="keywords">Queries</th>
-    <th>No. tweets</th>
-    <th>Periods in which the query bin was active</th>
-    </tr>
+        <tr>
+            <th>Querybin</th>
+            <th>Description</th>
+            <th class="keywords">Queries</th>
+            <th>No. tweets</th>
+            <th>Periods in which the query bin was active</th>
+        </tr>
     </thead>
     <tbody>
 <?php
