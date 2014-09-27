@@ -28,10 +28,12 @@ $querybins = getBins();
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
         <style type="text/css">
-            table { font-size:12px; }
-            .form-control{width: 400px; margin: 5px;}
-            th { background-color: #ccc; padding:8px;}
-            td { background-color: #eee; padding:8px;}
+            body,html { font-family: "Comic Sans MS", cursive, sans-serif; padding: 2px; font-size:14px; }
+            table { overflow:hidden; border-radius: 5px; font-size:14px; }
+            .form-control{ width: 400px; margin: 5px; }
+            th { background-color: #ccc; padding:8px; }
+            td { background-color: #eee; padding:8px; }
+            .row { padding-left: 30px; padding-right: 30px; }
             .keywords { width:600px; }
         </style>
     </head>
@@ -70,55 +72,61 @@ $querybins = getBins();
                 </div>
             </form>
     <h2>Query manager</h2>
-    <table class="table table-hover">
-    <thead>
-        <tr>
-            <th>Querybin</th>
-            <th>Description</th>
-            <th class="keywords">Queries</th>
-            <th>No. tweets</th>
-            <th>Periods in which the query bin was active</th>
-        </tr>
-    </thead>
-    <tbody>
-<?php
-    foreach ($querybins as $bin) {
-        $phraseList = array();
-        $phrasePeriodsList = array();
-        $activePhraseList = array();
+        <div class="row">
+            <table align="center" class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Querybin</th>
+                    <th>Description</th>
+                    <th class="keywords">Queries</th>
+                    <th>No. tweets</th>
+                    <th>Periods in which the query bin was active</th>
+                </tr>
+            </thead>
+            <tbody>
+        <?php
+            foreach ($querybins as $bin) {
+                $phraseList = array();
+                $phrasePeriodsList = array();
+                $activePhraseList = array();
 
-        if ($bin->type == 'search') {
-            foreach ($bin->phrases as $phrase) {
-                $phrasePeriodList[$phrase->id] = array_unique($phrase->periods);
-                $phraseList[$phrase->id] = $phrase->phrase;
-                if ($phrase->active) {
-                    $activePhraselist[$phrase->id] = $phrase->phrase;
+                if ($bin->type == 'search') {
+                    foreach ($bin->phrases as $phrase) {
+                        $phrasePeriodList[$phrase->id] = array_unique($phrase->periods);
+                        $phraseList[$phrase->id] = $phrase->phrase;
+                        if ($phrase->active) {
+                            $activePhraselist[$phrase->id] = $phrase->phrase;
+                        }
+                    }
+                }
+                $bin->periods = array_unique($bin->periods);
+                sort($bin->periods);
+                asort($phraseList);
+
+                $action = ($bin->active == 0) ? "start" : "stop";
+                if ($bin->type == 'search')
+                {
+                    echo '<tr>';
+                    echo '<td valign="top">' . $bin->name . '</td>';
+                    echo '<td valign="top">' . $bin->active . '</td>';
+                    echo '<td class="keywords" valign="top">';
+                    echo '<table width="100%">';
+                    foreach ($phraseList as $phrase_id => $phrase)
+                    {
+                        echo "<td valign='top'>$phrase</td>";
+                    }
+                    echo '</table>';
+                    echo '</td>';
+                    echo '<td valign="top" align="right"> ' . number_format($bin->nrOfTweets, 0, ",", ".") . '</td>';
+                    echo '<td valign="top" align="right"> ' . implode("<br />", $bin->periods) . '</td>';
+                    echo '</tr>';
                 }
             }
-        }
-        $bin->periods = array_unique($bin->periods);
-        sort($bin->periods);
-        asort($phraseList);
+            ?>
+                </tbody>
+            </table>
+        </div>
 
-        $action = ($bin->active == 0) ? "start" : "stop";
-        if ($bin->type == 'search')
-        {
-            echo '<tr>';
-            echo '<td valign="top">' . $bin->name . '</td>';
-            echo '<td valign="top">' . $bin->active . '</td>';
-            echo '<td class="keywords" valign="top">';
-            echo '<table width="100%">';
-            foreach ($phraseList as $phrase_id => $phrase)
-            {
-                echo "<td valign='top'>$phrase</td>";
-            }
-            echo '</table>';
-            echo '</td>';
-            echo '<td valign="top" align="right"> ' . number_format($bin->nrOfTweets, 0, ",", ".") . '</td>';
-            echo '<td valign="top" align="right"> ' . implode("<br />", $bin->periods) . '</td>';
-        }
-    }
-    ?>
     <script type='text/javascript' src='../../analysis/scripts/jquery-1.7.1.min.js'></script>
     <script type="text/javascript">
         function sendNewForm() {
