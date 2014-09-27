@@ -459,6 +459,32 @@ function getActiveOnepercentBin() {
     return $querybins;
 }
 
+/**
+ * 查詢 Search NULL 優先，最小日子次之，傳回 querybin_id，keywords, binname
+ * @return array|bool
+ * @author ninthday <jeffy@ninthday.info>
+ * @since 2014-09-26
+ */
+function getBestSearchBin(){
+    $dbh = pdo_connect();
+    $sql = "SELECT `tcat_search_timetable`.`querybin_id`, `tcat_search_timetable`.`origin_phrase`, `tcat_query_bins`.`querybin` FROM `tcat_search_timetable`
+            INNER JOIN `tcat_query_bins` ON `tcat_query_bins`.id = `tcat_search_timetable`.`querybin_id`
+            ORDER BY `tcat_search_timetable`.`updatetime` ASC";
+    $rec = $dbh->prepare($sql);
+    $querybins = array();
+    if($rec->execute()){
+        $res = $rec->fetch();
+        $querybins['querybin_id'] = $res['querybin_id'];
+        $querybins['keywords'] = $res['origin_phrase'];
+        $querybins['bin_name'] = $res['querybin'];
+    }else{
+        $dbh = false;
+        return false;
+    }
+    $dbh = false;
+    return $querybins;
+}
+
 function queryManagerBinExists($binname) {
     $dbh = pdo_connect();
     $rec = $dbh->prepare("SELECT id FROM tcat_query_bins WHERE querybin = :binname");
@@ -506,6 +532,7 @@ function queryManagerCreateBinFromExistingTables($binname, $querybin_id, $type, 
     } elseif ($type == 'follow' || $type == 'timeline' || $type == 'import timeline') {// insert users
         queryManagerInsertUsers($querybin_id, $queries, $starttime, $endtime);
     } elseif ($type == 'search') {
+        // 如果 type 爲 Search 檢查 Phrases 是否已存在
         $rec = $dbh->prepare("SELECT querybin FROM tcat_query_bins WHERE querybin = :binname"); //設計search的功能
         $rec->bindParam(":binname", $binname, PDO::PARAM_STR);
         if ($rec->execute() && $rec->rowCount() == 0) { //一個bin內的關鍵字只會存一份
@@ -600,6 +627,27 @@ function searchTimeTable($querybin_id, $createtime = "0000-00-00 00:00:00", $upd
     if (!$rec->execute() || !$rec->rowCount())
         die("could not insert into tcat_search_timetable $sql\n");
     $dbh = false;
+}
+
+/**
+ * 更新 Search 資料表的時間
+ *
+ * @param int $querybin_id Bin編號
+ * @return bool 更新成功與否
+ * @author ninthday <jeffy@ninthday.info>
+ * @since 2014-09-27
+ */
+function updateSearchTime($querybin_id){
+    $bolRtn = false;
+    $dbh = pdo_connect();
+    $nowtime = date('Y-m-d H:i:s');
+    $sql = 'UPDATE `tcat_search_timetable` SET `updatetime` = \'' . $nowtime . '\' WHERE `querybin_id` = ' . $querybin_id;
+    $rec = $dbh->prepare($sql);
+    if($rec->execute()){
+        $bolRtn = true;
+    }
+    $dbh = false;
+    return $bolRtn;
 }
 
 /*
