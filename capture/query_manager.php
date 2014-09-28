@@ -135,7 +135,7 @@ function create_new_bin($params) {
         $origin_parses = $params["newbin_phrases"];
 
         $description = trim($params['description']);
-        $sql = "INSERT INTO `tcat_search_timetable`(`querybin_id`, `description`, `origin_phrase`, `createtime`, `updatetime`, `savedtime`) VALUES (:querybin_id, :description, :origin_parses, :createtime, NULL, NULL)";
+        $sql = "INSERT INTO `tcat_search_timetable`(`querybin_id`, `description`, `origin_phrase`, `createtime`, `updatetime`) VALUES (:querybin_id, :description, :origin_parses, :createtime, NULL)";
         $insert_search = $dbh->prepare($sql);
         $insert_search->bindParam(":querybin_id", $lastbinid, PDO::PARAM_INT);
         $insert_search->bindParam(":description", $description, PDO::PARAM_STR);
