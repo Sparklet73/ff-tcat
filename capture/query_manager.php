@@ -714,7 +714,13 @@ function getSearchBins(){
     $dbh = false;
     return $querybins;
 }
-
+/**
+ * 取得 Saved Archive Bins 的資料列表
+ *
+ * @return array Search Bin Content
+ * @author Ching-Ya Lin <talcy.73@gmail.com>
+ * @since 2014-09-28
+ */
 function getSavedBins(){
     $dbh = pdo_connect();
     $sql = 'SELECT `tcat_query_bins`.`id`, `tcat_query_bins`.`querybin`, `description`, `origin_phrase`, `createtime`, `savedtime`
