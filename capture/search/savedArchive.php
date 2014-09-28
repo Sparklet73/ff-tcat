@@ -1,9 +1,33 @@
+<?php
+/**
+ * @author: Ching-Ya Lin
+ * @since: 2014/9/28
+ *
+ */
+include_once("../../config.php");
+
+if (defined("ADMIN_USER") && ADMIN_USER != "" && (!isset($_SERVER['PHP_AUTH_USER']) || $_SERVER['PHP_AUTH_USER'] != ADMIN_USER))
+    die("Go away, you evil hacker!");
+
+include_once("../query_manager.php");
+include_once("../../common/functions.php");
+include_once("../../capture/common/functions.php");
+
+create_error_logs();
+
+$captureroles = unserialize(CAPTUREROLES);
+
+$querybins = getSavedBins();
+?>
 <html>
 <head>
     <title>FFtcat - Flood Fire Twitter Capturing and Analysis Toolset</title>
     <meta charset='<?php echo mb_internal_encoding(); ?>'>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <script type='text/javascript' src='../../analysis/scripts/jquery-1.7.1.min.js'></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
     <style type="text/css">
         body, html {
             font-family: serif, sans-serif, fantasy, monospace;
@@ -95,14 +119,24 @@
                 </tr>
                 </thead>
                 <tbody>
+                <?php
+                foreach ($querybins as $bin) {
+                    echo '<tr>';
+                    echo '<td>' . $bin->name . '</td>';
+                    echo '<td>' . implode(', ', explode("OR", $bin->phrases)) . '</td>';
+                    echo '<td align="center"> ' . number_format($bin->nrOfTweets) . '</td>';
+                    echo '<td align="center"> ' . $bin->createtime . '</td>';
+                    echo '<td align="center"> ' . $bin->savedtime . '</td>';
+                    echo '<td> ' . $bin->description . '</td>';
+                    echo '</tr>';
+                }
+                ?>
                 </tbody>
             </table>
         </div>
     </div>
 </div>
 
-<script type='text/javascript' src='../../analysis/scripts/jquery-1.7.1.min.js'></script>
-<!-- Include all compiled plugins (below), or include individual files as needed -->
-<script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+
 </body>
 </html>

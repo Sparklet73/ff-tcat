@@ -13,7 +13,6 @@ include_once("../query_manager.php");
 include_once("../../common/functions.php");
 include_once("../../capture/common/functions.php");
 
-create_admin();
 create_error_logs();
 
 $captureroles = unserialize(CAPTUREROLES);

@@ -715,6 +715,39 @@ function getSearchBins(){
     return $querybins;
 }
 
+function getSavedBins(){
+    $dbh = pdo_connect();
+    $sql = 'SELECT `tcat_query_bins`.`id`, `tcat_query_bins`.`querybin`, `description`, `origin_phrase`, `createtime`, `savedtime`
+            FROM `tcat_query_bins`
+            INNER JOIN `tcat_search_saved_archive` ON `tcat_search_saved_archive`.`querybin_id` = `tcat_query_bins`.`id`';
+    $rec = $dbh->prepare($sql);
+    $rec->execute();
+    $rs_sbin = $rec->fetchAll();
+    $querybins = array();
+    foreach ($rs_sbin as $data) {
+        if (!isset($querybins[$data['id']])) {
+            $bin = new stdClass();
+            $bin->id = $data['id'];
+            $bin->name = $data['querybin'];
+            $bin->phrases = $data['origin_phrase'];
+            $bin->createtime = $data['createtime'];
+            $bin->savedtime = $data['savedtime'];
+            $bin->description = $data['description'];
+
+            $sql = "SELECT count(id) AS count FROM " . $data['querybin'] . "_tweets";
+            $res = $dbh->prepare($sql);
+            if ($res->execute() && $res->rowCount()) {
+                $result = $res->fetch();
+                $bin->nrOfTweets = $result['count'];
+            }
+        }
+        $querybins[$data['id']] = $bin;
+    }
+
+    $dbh = false;
+    return $querybins;
+}
+
 function getLastRateLimitHit() {
     $dbh = pdo_connect();
     $rec = $dbh->prepare("SELECT end FROM tcat_error_ratelimit ORDER BY end DESC LIMIT 1");
