@@ -8,9 +8,11 @@ require_once 'common/functions.php';
 
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
-        <title>DMI Twitter Capturing and Analysis Toolset (DMI-TCAT)</title>
+        <title>FFtcat - Flood Fire Twitter Capturing and Analysis Toolset</title>
 
         <meta http-equiv="Content-Type" content="text/html; charset=<?php echo mb_internal_encoding(); ?>" />
+
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 
         <link rel="stylesheet" href="css/main.css" type="text/css" />
 
@@ -57,12 +59,12 @@ if (defined('ANALYSIS_URL'))
 
 
         document.location.href = _url;
-    } 
+    }
     function saveSvg(id){
         $("svg").attr({ version: '1.1' , xmlns:"http://www.w3.org/2000/svg"});
         var e = document.getElementById(id);
         var svg = e.getElementsByTagName('svg')[0].parentNode.innerHTML;
-        var b64 = window.btoa(unescape(encodeURIComponent(svg)));	 
+        var b64 = window.btoa(unescape(encodeURIComponent(svg)));
         // Works in Firefox 3.6 and Webkit and possibly any browser which supports the data-uri
         $("#download_"+id).html($('<a style="width:25px;height:25px;" href-lang="image/svg+xml" href="data:image/svg+xml;base64,\n'+b64+'" title="file.svg">Download SVG</a>'));
     }
@@ -114,20 +116,21 @@ if (defined('ANALYSIS_URL'))
     </head>
 
     <body>
-
+    <div class="navbar navbar-default" role="navigation">
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav">
+                <li><a class="brand" href="#">FFtcat</a></li>
+                <li><a href="../capture/search/index.php" data-toggle="tab">Search</a></li>
+                <li><a href="#archived" data-toggle="tab">Saved Archive</a></li>
+                <li class="active"><a href="#analysis" data-toggle="tab">Analysis</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="tab-content">
+    <div class="tab-pane active" id="analysis">
         <div id="if_fullpage">
 
-            <h1 id="if_title">DMI Twitter Capturing and Analysis Toolset (DMI-TCAT)</h1>
-
-            <div id="if_links">
-                &raquo; <a href="https://github.com/digitalmethodsinitiative/dmi-tcat" target="_blank" class="if_toplinks">github</a>&nbsp;&nbsp;&nbsp;
-                &raquo; <a href="https://github.com/digitalmethodsinitiative/dmi-tcat/issues?state=open" target="_blank" class="if_toplinks">issues</a>&nbsp;&nbsp;&nbsp;
-                &raquo; <a href="https://github.com/digitalmethodsinitiative/dmi-tcat/wiki" target="_blank" class="if_toplinks">FAQ</a>
-                <?php
-                if (defined("ADMIN_USER") && ADMIN_USER != "" && isset($_SERVER['PHP_AUTH_USER']) && $_SERVER['PHP_AUTH_USER'] == ADMIN_USER)
-                    print '&nbsp;&nbsp;&nbsp; &raquo; <a href="../capture/index.php" target="_blank" class="if_toplinks">admin</a>';
-                ?>
-            </div>
+            <h1 id="if_title">FFtcat - Analysis Toolset</h1>
 
             <div style="clear: both;"></div>
 
@@ -414,22 +417,21 @@ if (defined('ANALYSIS_URL'))
 
                     <div id="if_panel_linkchart" class="if_panel_box"></div>
 
-                    <script type="text/javascript">
+                        <script type="text/javascript">
 
-                        var data = new google.visualization.DataTable();
-                        data.addColumn('string', 'Slice');
-                        data.addColumn('number', 'Percent');
-                        data.addRows(2);
-                        data.setValue(0, 0, 'Tweets containing links');
-                        data.setValue(0, 1, <?php echo $numlinktweets; ?>);
-                        data.setValue(1, 0, 'Tweets containing no links');
-                        data.setValue(1, 1, <?php echo $numtweets - $numlinktweets; ?>);
+                            var data = new google.visualization.DataTable();
+                            data.addColumn('string', 'Slice');
+                            data.addColumn('number', 'Percent');
+                            data.addRows(2);
+                            data.setValue(0, 0, 'Tweets containing links');
+                            data.setValue(0, 1, <?php echo $numlinktweets; ?>);
+                            data.setValue(1, 0, 'Tweets containing no links');
+                            data.setValue(1, 1, <?php echo $numtweets - $numlinktweets; ?>);
 
-                        var chart = new google.visualization.PieChart(document.getElementById('if_panel_linkchart'));
-                        chart.draw(data, {width: 380, height: 160});
+                            var chart = new google.visualization.PieChart(document.getElementById('if_panel_linkchart'));
+                            chart.draw(data, {width: 380, height: 160});
 
-                    </script>
-
+                        </script>
                 </div>
 
                 <hr />
@@ -437,7 +439,7 @@ if (defined('ANALYSIS_URL'))
                 <div id="if_panel_linegraph"></div>
                 <div class='svglink'>
                     <div class='generate_svglink' onclick="saveSvg('if_panel_linegraph')">Generate SVG</div>
-                    <div class='download_svglink' id="download_if_panel_linegraph"></div> 
+                    <div class='download_svglink' id="download_if_panel_linegraph"></div>
                 </div>
                 <br />
 
@@ -506,7 +508,7 @@ foreach ($linedata as $key => $value) {
                     </script>
                     <div class='svglink'>
                         <div class='generate_svglink' onclick="saveSvg('if_panel_linegraph_norm')">Generate SVG</div>
-                        <div class='download_svglink' id="download_if_panel_linegraph_norm"></div> 
+                        <div class='download_svglink' id="download_if_panel_linegraph_norm"></div>
                     </div>
                     <br />
                 <?php } ?>
@@ -858,6 +860,8 @@ foreach ($linedata as $key => $value) {
                                 <?php } ?>
 
                                 </div>
+        </div>
+    </div>
                                 </fieldset>
 
                                 <div style="display:none" id="whattodo" />

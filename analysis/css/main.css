@@ -1,14 +1,16 @@
 /* tags */
 
-body,html { font-family:Arial, Helvetica, sans-serif; font-size:11px; }
+body,html {
+    font-family:serif,sans-serif,fantasy,monospace;
+    font-size:12px;
+    padding: 10px;
+}
 
-h1 { font-size:16px; margin:20px 0px 0px 0px; }
+h1 { font-size:34px;}
 h2 { font-size:14px; margin:20px 0px 15px 0px; padding:3px; background-color:#ddd; }
-h3 { font-size:13px; margin:10px 0px 8px 0px; }
+h3 { font-size:13px; margin:10px 0px 8px 0px; font-weight: bold;}
 
-a { font-size:12px; }
-
-fieldset { font-size:14px; margin-top:20px; width:100%; }
+a { font-size:14px; }
 
 table { border-collapse:collapse; border:0px; }
 td { font-size:12px; padding:5px; }
@@ -47,4 +49,21 @@ hr { border:0; color:#aaa; background-color:#aaa; height:1px; width:100%; margin
 .download_svglink {
     float: left;    
     margin-left: 5px;
+}
+
+.navbar {
+    font-size: 14px;
+}
+.brand {
+    font-size: 22px;
+}
+fieldset {
+    border:#333 2px solid;
+    padding:5px;
+    margin-bottom:10px;
+    border-radius: 8px;
+}
+legend {
+    padding: 5px 10px;
+    margin-bottom: 0px;
 }

@@ -29,11 +29,19 @@ $querybins = getSearchBins();
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <style type="text/css">
         body, html {
-            font-family: "Comic Sans MS", cursive, sans-serif;
-            padding: 2px;
+            font-family:serif,sans-serif,fantasy,monospace;
+            padding: 10px;
+            font-size: 12px;
+        }
+        h1 {
+            font-size: 34px;
+        }
+        .navbar {
             font-size: 14px;
         }
-
+        .brand {
+            font-size: 22px;
+        }
         table {
             overflow: hidden;
             border-radius: 5px;
@@ -66,72 +74,86 @@ $querybins = getSearchBins();
     </style>
 </head>
 <body>
-<h1>Flood Fire - Twitter Capturing and Analysis Toolset</h1>
+<div class="navbar navbar-default" role="navigation">
+    <div class="collapse navbar-collapse navbar-ex1-collapse">
+        <ul class="nav navbar-nav">
+            <li><a class="brand" href="#">FFtcat</a></li>
+            <li class="active"><a href="#search" data-toggle="tab">Search</a></li>
+            <li><a href="#archived" data-toggle="tab">Saved Archive</a></li>
+            <li><a href="../../analysis/index.php" data-toggle="tab">Analysis</a></li>
+        </ul>
+    </div>
+</div>
+<div class="tab-content">
+    <div class="tab-pane active" id="search">
+        <h1>FFtcat - Create Query Bin</h1>
 
-<form onsubmit="sendNewForm(); return false;">
-    <div class="form-group">
-        <label for="newbin_name" class="col-sm-2 control-label">Query Bin</label>
+        <form onsubmit="sendNewForm(); return false;">
+            <div class="form-group">
+                <label for="newbin_name" class="col-sm-2 control-label">Query Bin</label>
 
-        <div class="col-sm-10">
-            <input type="text" class="form-control" id="newbin_name" placeholder="Bin name">
-            <li>之後不可修改。</li>
-            <br>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="newbin_name" placeholder="Bin name">
+                    <li>之後不可修改。</li>
+                    <br>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputPhrase" class="col-sm-2 control-label">Phrase to search</label>
+
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="inputPhrase" placeholder="Phrases">
+                    <li>以OR區別關鍵字，例如:台灣 OR 中華民國 OR Taiwan OR "Republic of China"</li>
+                    <br>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputPhrase" class="col-sm-2 control-label">Description</label>
+
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="inputDescription" placeholder="Description">
+                    <br>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button type="submit" class="btn btn-default">Create query bin</button>
+                    <br>
+                    <br>
+                </div>
+            </div>
+        </form>
+        <h2>Query manager</h2>
+
+        <div class="row">
+            <table align="center" class="table table-hover">
+                <thead>
+                <tr>
+                    <th>Querybin</th>
+                    <th class="keywords">Phrases</th>
+                    <th>No. tweets</th>
+                    <th>Created Time</th>
+                    <th>Last Update</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php
+                foreach ($querybins as $bin) {
+                    echo '<tr>';
+                    echo '<td>' . $bin->name . '</td>';
+                    echo '<td>' . implode(', ', explode("OR", $bin->phrases)) . '</td>';
+                    echo '<td align="center"> ' . number_format($bin->nrOfTweets) . '</td>';
+                    echo '<td align="center"> ' . $bin->createtime . '</td>';
+                    echo '<td align="center"> ' . $bin->updatetime . '</td>';
+                    echo '<td> ' . $bin->description . '</td>';
+                    echo '</tr>';
+                }
+                ?>
+                </tbody>
+            </table>
         </div>
     </div>
-    <div class="form-group">
-        <label for="inputPhrase" class="col-sm-2 control-label">Phrase to search</label>
-
-        <div class="col-sm-10">
-            <input type="text" class="form-control" id="inputPhrase" placeholder="Phrases">
-            <li>以OR區別關鍵字，例如:台灣 OR 中華民國 OR Taiwan OR "Republic of China"</li>
-            <br>
-        </div>
-    </div>
-    <div class="form-group">
-        <label for="inputPhrase" class="col-sm-2 control-label">Description</label>
-
-        <div class="col-sm-10">
-            <input type="text" class="form-control" id="inputDescription" placeholder="Description">
-            <br>
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="col-sm-offset-2 col-sm-10">
-            <button type="submit" class="btn btn-default">Create query bin</button>
-            <br>
-            <br>
-        </div>
-    </div>
-</form>
-<h2>Query manager</h2>
-
-<div class="row">
-    <table align="center" class="table table-hover">
-        <thead>
-        <tr>
-            <th>Querybin</th>
-            <th class="keywords">Phrases</th>
-            <th>No. tweets</th>
-            <th>Created Time</th>
-            <th>Last Update</th>
-            <th>Description</th>
-        </tr>
-        </thead>
-        <tbody>
-        <?php
-        foreach ($querybins as $bin) {
-            echo '<tr>';
-            echo '<td>' . $bin->name . '</td>';
-            echo '<td>' . implode(', ', explode("OR", $bin->phrases)) . '</td>';
-            echo '<td align="center"> ' . number_format($bin->nrOfTweets) . '</td>';
-            echo '<td align="center"> ' . $bin->createtime . '</td>';
-            echo '<td align="center"> ' . $bin->updatetime . '</td>';
-            echo '<td> ' . $bin->description . '</td>';
-            echo '</tr>';
-        }
-        ?>
-        </tbody>
-    </table>
 </div>
 
 <script type='text/javascript' src='../../analysis/scripts/jquery-1.7.1.min.js'></script>
