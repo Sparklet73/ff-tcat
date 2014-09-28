@@ -121,7 +121,7 @@ if (defined('ANALYSIS_URL'))
             <ul class="nav navbar-nav">
                 <li><a class="brand" href="#">FFtcat</a></li>
                 <li><a href="../capture/search/index.php" data-toggle="tab">Search</a></li>
-                <li><a href="#archived" data-toggle="tab">Saved Archive</a></li>
+                <li><a href="../capture/search/savedArchive.php" data-toggle="tab">Saved Archive</a></li>
                 <li class="active"><a href="#analysis" data-toggle="tab">Analysis</a></li>
             </ul>
         </div>

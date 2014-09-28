@@ -6,7 +6,9 @@ body,html {
     padding: 10px;
 }
 
-h1 { font-size:34px;}
+h1 { font-size:34px;
+    margin-bottom: 10px;
+    margin-top: 0px;}
 h2 { font-size:14px; margin:20px 0px 15px 0px; padding:3px; background-color:#ddd; }
 h3 { font-size:13px; margin:10px 0px 8px 0px; font-weight: bold;}
 

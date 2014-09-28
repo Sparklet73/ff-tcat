@@ -35,6 +35,8 @@ $querybins = getSearchBins();
         }
         h1 {
             font-size: 34px;
+            margin-bottom: 10px;
+            margin-top: 0px;
         }
         .navbar {
             font-size: 14px;
@@ -79,7 +81,7 @@ $querybins = getSearchBins();
         <ul class="nav navbar-nav">
             <li><a class="brand" href="#">FFtcat</a></li>
             <li class="active"><a href="#search" data-toggle="tab">Search</a></li>
-            <li><a href="#archived" data-toggle="tab">Saved Archive</a></li>
+            <li><a href="savedArchive.php" data-toggle="tab">Saved Archive</a></li>
             <li><a href="../../analysis/index.php" data-toggle="tab">Analysis</a></li>
         </ul>
     </div>
