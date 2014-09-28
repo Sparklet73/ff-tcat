@@ -27,23 +27,28 @@ $querybins = getSearchBins();
     <meta charset='<?php echo mb_internal_encoding(); ?>'>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
     <style type="text/css">
         body, html {
-            font-family:serif,sans-serif,fantasy,monospace;
+            font-family: serif, sans-serif, fantasy, monospace;
             padding: 10px;
             font-size: 12px;
         }
+
         h1 {
             font-size: 34px;
             margin-bottom: 10px;
             margin-top: 0px;
         }
+
         .navbar {
             font-size: 14px;
         }
+
         .brand {
             font-size: 22px;
         }
+
         table {
             overflow: hidden;
             border-radius: 5px;
@@ -77,14 +82,22 @@ $querybins = getSearchBins();
 </head>
 <body>
 <div class="navbar navbar-default" role="navigation">
-    <div class="collapse navbar-collapse navbar-ex1-collapse">
-        <ul class="nav navbar-nav">
-            <li><a class="brand" href="#">FFtcat</a></li>
-            <li class="active"><a href="#search" data-toggle="tab">Search</a></li>
-            <li><a href="savedArchive.php" data-toggle="tab">Saved Archive</a></li>
-            <li><a href="../../analysis/index.php" data-toggle="tab">Analysis</a></li>
-        </ul>
-    </div>
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">Flood and Fire TCAT</a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="#search"">Search</a></li>
+                <li><a href="savedArchive.php">Saved Archive</a></li>
+                <li><a href="../../analysis/index.php">Analysis</a></li>
+            </ul>
+        </div>
 </div>
 <div class="tab-content">
     <div class="tab-pane active" id="search">
@@ -159,6 +172,8 @@ $querybins = getSearchBins();
 </div>
 
 <script type='text/javascript' src='../../analysis/scripts/jquery-1.7.1.min.js'></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
 <script type="text/javascript">
     function sendNewForm() {
         var _bin = $("#newbin_name").val();

@@ -60,15 +60,24 @@
 </head>
 <body>
 <div class="navbar navbar-default" role="navigation">
-    <div class="collapse navbar-collapse navbar-ex1-collapse">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">Flood and Fire TCAT</a>
+    </div>
+    <div class="navbar-collapse collapse">
         <ul class="nav navbar-nav">
-            <li><a class="brand" href="#">FFtcat</a></li>
-            <li><a href="index.php" data-toggle="tab">Search</a></li>
-            <li class="active"><a href="#archived" data-toggle="tab">Saved Archive</a></li>
-            <li><a href="../../analysis/index.php" data-toggle="tab">Analysis</a></li>
+            <li><a href="index.php">Search</a></li>
+            <li class="active"><a href="#archived">Saved Archive</a></li>
+            <li><a href="../../analysis/index.php">Analysis</a></li>
         </ul>
     </div>
 </div>
+
 <div class="tab-content">
     <div class="tab-pane active" id="archived">
         <h1>FFtcat - Saved Archive</h1>
@@ -91,5 +100,9 @@
         </div>
     </div>
 </div>
+
+<script type='text/javascript' src='../../analysis/scripts/jquery-1.7.1.min.js'></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
 </body>
 </html>
