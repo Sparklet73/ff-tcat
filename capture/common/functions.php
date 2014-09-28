@@ -538,7 +538,6 @@ function queryManagerCreateBinFromExistingTables($binname, $querybin_id, $type, 
         if ($rec->execute() && $rec->rowCount() == 0) { //一個bin內的關鍵字只會存一份
             queryManagerInsertPhrases($querybin_id, $queries, $starttime, $endtime);
         }
-        searchTimeTable($querybin_id, $createtime, $updatetime);
     }
 }
 
